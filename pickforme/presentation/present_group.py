@@ -1,11 +1,11 @@
 from colorama import Fore, Style
-from pickforme.common.utils import UtilityFunctions
-from pickforme.common import constants
-from pickforme.business_logic.group import GroupManager
-from pickforme.business_logic.category import CategoryManager
-from pickforme.business_logic.activity import ActivityManager
+from common.utils import UtilityFunctions
+from common import constants
+from business_logic.group import GroupManager
+from business_logic.category import CategoryManager
+from business_logic.activity import ActivityManager
 
-from pickforme.common.logger import logger
+from common.logger import logger
 
 class PresentGroup(GroupManager, UtilityFunctions):
     

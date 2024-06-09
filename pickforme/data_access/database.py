@@ -4,9 +4,9 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship, scoped_session
 
-from pickforme.common.AppException import PickForMeException
-from pickforme.common import constants
-from pickforme.common.logger import logger
+from common.AppException import PickForMeException
+from common import constants
+from common.logger import logger
 
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///'+constants.DATABASE_LOCATION+constants.DATABASE_NAME)
 

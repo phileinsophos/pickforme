@@ -1,10 +1,10 @@
 from random import choice
 from colorama import Fore, Style
-from pickforme.common.utils import UtilityFunctions
-from pickforme.common import constants
-from pickforme.business_logic.activity import ActivityManager
+from common.utils import UtilityFunctions
+from common import constants
+from business_logic.activity import ActivityManager
 
-from pickforme.common.logger import logger
+from common.logger import logger
 
 class PresentActivity(UtilityFunctions, ActivityManager):
     def __init__(self):
@@ -137,7 +137,7 @@ class PresentActivity(UtilityFunctions, ActivityManager):
         activities = self.list_activities(category_id, group_id)
         if activities:
             activity = choice(activities)
-            print(f"Randomly selected activity: {activity.name}")
+            print(f"Randomly selected activity: {activity}")
         else:
             print("No activities available to pick.")
             
