@@ -5,10 +5,10 @@ import csv
 from prettytable import PrettyTable
 from getpass import getpass
 from colorama import Fore, Style
-from pickforme.common.AppException import PickForMeException
-from pickforme.common import constants
+from common.AppException import PickForMeException
+from common import constants
 
-from pickforme.common.logger import logger
+from common.logger import logger
         
 class UtilityFunctions:
     """
@@ -37,7 +37,7 @@ class UtilityFunctions:
         # Connect to the SQLite database
         logger.info('connecting to the database')
         try:
-            conn = sqlite3.connect(constants.DATABASE_NAME)
+            conn = sqlite3.connect(constants.DATABASE_LOCATION + constants.DATABASE_NAME)
             cursor = conn.cursor()
             logger.info('connected to the database')
             # Create a table to store the hashed master password if it doesn't exist
@@ -76,7 +76,7 @@ class UtilityFunctions:
         logger.info('checking if the tool is initialized')
         password_count = 0
         try:
-            conn = sqlite3.connect(constants.DATABASE_NAME)
+            conn = sqlite3.connect(constants.DATABASE_LOCATION + constants.DATABASE_NAME)
             cursor = conn.cursor()
             logger.info("connected to the database")
             cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='master_password'")
@@ -147,7 +147,7 @@ class UtilityFunctions:
         is_valid_password = False
         try:
             # Connect to the SQLite database
-            conn = sqlite3.connect(constants.DATABASE_NAME)
+            conn = sqlite3.connect(constants.DATABASE_LOCATION + constants.DATABASE_NAME)
             cursor = conn.cursor()
             logger.info('Connected to the database')
 

@@ -2,8 +2,8 @@ from datetime import datetime, timezone
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import StatementError
 
-from pickforme.data_access.database import Activity, DatabaseConnections
-from pickforme.common.logger import logger
+from data_access.database import Activity, DatabaseConnections
+from common.logger import logger
 
 class ActivityManager(DatabaseConnections):
     """Class to manage activities."""
