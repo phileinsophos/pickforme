@@ -1,6 +1,6 @@
 import pathlib
-from pickforme.presentation.cli import PickForMeCmd
-from pickforme.common.logger import logger
+from presentation.cli import PickForMeCmd
+from common.logger import logger
 
 def main():
     """

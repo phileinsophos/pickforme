@@ -5,15 +5,32 @@ import csv
 from prettytable import PrettyTable
 from getpass import getpass
 from colorama import Fore, Style
-from pickforme.common.AppException import PickForMeException
-from pickforme.common import constants
-
-from pickforme.common.logger import logger
+from common.AppException import PickForMeException
+from common import constants
+from common.logger import logger
         
-class UtilityFunctions:
+class UtilityFunctions():
     """
     UtilityFunctions class provides utility functions for various tasks
     """
+    def __init__(self):
+        logger.info('Initializing UtilityFunctions')
+        super().__init__()
+        logger.info('UtilityFunctions initialized')
+        self.cursor = None
+        self.connection = None
+        
+    def get_db_conn_and_cursor(self):
+        if self.cursor == None and self.connection == None: 
+            logger.info('creating database connection, and returning connection and cursor')
+            self.connection = sqlite3.connect(constants.DATABASE_LOCATION + constants.DATABASE_NAME)
+            self.cursor = self.connection.cursor()
+            logger.info('connection with database established, returning connection and cursor')
+            return self.connection, self.cursor
+        else:
+            logger.info('database connection already established, returning existing connection and cursor')
+            return self.connection, self.cursor
+        
     def hash_password(self, password):
         """
         Hashes the given password using SHA-256 algorithm.
@@ -37,8 +54,7 @@ class UtilityFunctions:
         # Connect to the SQLite database
         logger.info('connecting to the database')
         try:
-            conn = sqlite3.connect(constants.DATABASE_NAME)
-            cursor = conn.cursor()
+            conn, cursor = self.get_db_conn_and_cursor()
             logger.info('connected to the database')
             # Create a table to store the hashed master password if it doesn't exist
             cursor.execute('''CREATE TABLE IF NOT EXISTS master_password (
@@ -56,12 +72,10 @@ class UtilityFunctions:
             
             # Insert or update the hashed master password in the database
             cursor.execute("INSERT OR REPLACE INTO master_password (id, password_hash) VALUES (1, ?)", (hashed_password,))
-            logger.info('stored master password in the database')
+            logger.info('executing store master password to the database')
             # Commit changes and close the connection
             conn.commit()
             logger.info('commited changes')
-            conn.close()
-            logger.info('connection closed')
         except Exception as e:
             logger.exception("An error occurred while storing the master password : %s", e)
             raise PickForMeException(e) from e
@@ -76,8 +90,7 @@ class UtilityFunctions:
         logger.info('checking if the tool is initialized')
         password_count = 0
         try:
-            conn = sqlite3.connect(constants.DATABASE_NAME)
-            cursor = conn.cursor()
+            conn, cursor = self.get_db_conn_and_cursor()
             logger.info("connected to the database")
             cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='master_password'")
             table_exists = cursor.fetchone()[0]
@@ -89,7 +102,6 @@ class UtilityFunctions:
             cursor.execute("SELECT COUNT(*) FROM master_password")
             password_count = cursor.fetchone()[0]
             logger.info("master_password table found")
-            conn.close()
             logger.info("result of check if the tool is initialized : %s", password_count)
         except Exception as e:
             logger.exception("An error occurred while checking if the tool is initialized : %s", e)
@@ -112,8 +124,7 @@ class UtilityFunctions:
         try:
             pathlib.Path('pickforme_dbdump').mkdir(parents=True, exist_ok=True)
             logger.info('created directory if not exists')
-            conn = sqlite3.connect(constants.DATABASE_LOCATION + constants.DATABASE_NAME)
-            cursor = conn.cursor()
+            conn, cursor = self.get_db_conn_and_cursor()
             logger.info('connected to the database')
             for db_table in constants.DATABASE_TABLES:
                 query = f"SELECT * FROM {db_table}"
@@ -129,7 +140,6 @@ class UtilityFunctions:
                     writer.writerow(column_names)
                     writer.writerows(rows)
                     logger.info('data exported to csv')
-            conn.close()
         except Exception as e:
             logger.exception("An error occurred while exporting data to csv : %s", e)
 
@@ -147,8 +157,7 @@ class UtilityFunctions:
         is_valid_password = False
         try:
             # Connect to the SQLite database
-            conn = sqlite3.connect(constants.DATABASE_NAME)
-            cursor = conn.cursor()
+            conn, cursor = self.get_db_conn_and_cursor()
             logger.info('Connected to the database')
 
             # Retrieve the hashed master password from the database
@@ -168,7 +177,6 @@ class UtilityFunctions:
                 is_valid_password = False
 
             # Close the database connection
-            conn.close()
             logger.info('Database connection closed')
         except Exception as e:
             logger.exception("An error occurred while validating the master password: %s", e)
@@ -189,8 +197,7 @@ class UtilityFunctions:
             logger.info('master password is valid')
             return True
         else:
-            logger.info('master password is not valid')
-            print(Fore.RED + "Invalid master password. Please try again." + Style.RESET_ALL)
+            logger.error('master password is not valid')
             return False
         
     def display_tabular_data(self, table_data, table_headers):

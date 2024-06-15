@@ -4,9 +4,9 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship, scoped_session
 
-from pickforme.common.AppException import PickForMeException
-from pickforme.common import constants
-from pickforme.common.logger import logger
+from common.AppException import PickForMeException
+from common import constants
+from common.logger import logger
 
 DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///'+constants.DATABASE_LOCATION+constants.DATABASE_NAME)
 
@@ -85,6 +85,8 @@ class Activity(Base):
     group_id = Column(Integer, ForeignKey('groups.id'), nullable=False)
     group = relationship('Group')
     is_deleted = Column(Boolean, default=False, nullable=False)
+    was_selected = Column(Boolean, default=False, nullable=False)
+    select_timestamp = Column(DateTime)
     insert_timestamp = Column(DateTime, default=datetime.utcnow)
     deleted_timestamp = Column(DateTime)
     updated_timestamp = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
