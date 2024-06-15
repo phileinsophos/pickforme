@@ -85,6 +85,8 @@ class Activity(Base):
     group_id = Column(Integer, ForeignKey('groups.id'), nullable=False)
     group = relationship('Group')
     is_deleted = Column(Boolean, default=False, nullable=False)
+    was_selected = Column(Boolean, default=False, nullable=False)
+    select_timestamp = Column(DateTime)
     insert_timestamp = Column(DateTime, default=datetime.utcnow)
     deleted_timestamp = Column(DateTime)
     updated_timestamp = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

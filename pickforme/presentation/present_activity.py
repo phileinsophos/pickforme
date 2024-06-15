@@ -134,12 +134,13 @@ class PresentActivity(UtilityFunctions, ActivityManager):
             - The randomly selected activity name.
             - A message if no activities are available to pick.
         """
-        activities = self.list_activities(category_id, group_id)
-        if activities:
-            activity = choice(activities)
-            print(f"Randomly selected activity: {activity}")
+        picked_activity = self.pick_activity(category_id, group_id)
+        if picked_activity:
+            headers=["Id", "Name", "Location", "Suggested by"]
+            picked_data = [[picked_activity.id, picked_activity.name, picked_activity.location, picked_activity.suggested_by]]
+            self.display_tabular_data(picked_data, headers)
         else:
-            print("No activities available to pick.")
+            print(Fore.LIGHTRED_EX + "No activities available to pick" + Style.RESET_ALL)
             
     def present_invalid_operation(self, command):
         """

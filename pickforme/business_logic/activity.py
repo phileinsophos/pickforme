@@ -1,3 +1,4 @@
+import random
 from datetime import datetime, timezone
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import StatementError
@@ -38,6 +39,7 @@ class ActivityManager(DatabaseConnections):
                 logger.info('Excluding deleted activities')
                 activities = self.session.query(Activity.id, Activity.name,Activity.location, Activity.suggested_by).filter_by(
                     is_deleted=False,
+                    was_selected=False,
                     group_id=group_id,
                     category_id=category_id
                     ).all()
@@ -61,7 +63,47 @@ class ActivityManager(DatabaseConnections):
         activity.updated_timestamp = datetime.now(timezone.utc)
         self.session.commit()
         logger.info('Activity deleted: %s', activity_id)
+    
+    def pick_activity(self, category_id, group_id):
+        """Randomly pick an activity and update its was_selected field to True."""
+        logger.info('Picking a random activity for group ID: %s and category ID: %s', group_id, category_id)
 
+        if category_id is None or group_id is None:
+            logger.error('Category ID or Group ID is None.')
+            return None
+
+        try:
+            activities = self.session.query(Activity).filter(
+                Activity.group_id == group_id,
+                Activity.category_id == category_id,
+                Activity.is_deleted == False,
+                Activity.was_selected == False
+            ).all()
+            
+            if not activities:
+                logger.warning('No activities found for group ID: %s and category ID: %s', group_id, category_id)
+                return None
+
+            selected_activity = random.choice(activities)
+            selected_activity.was_selected = True
+            timestamp = datetime.now(timezone.utc)
+            selected_activity.select_timestamp = timestamp
+            selected_activity.updated_timestamp = timestamp
+            logger.info('Activity selected: %s', selected_activity.id)
+            self.session.add(selected_activity)
+            self.session.commit()
+            logger.info('updated selected activity record details')
+            return selected_activity
+
+        except StatementError as e:
+            logger.exception('A database error occurred while picking a random activity: %s', e)
+            self.session.rollback()
+            return None
+        except Exception as e:
+            logger.exception('An unexpected error occurred: %s', e)
+            self.session.rollback()
+            return None
+        
     def truncate_activities(self):
         """
         Truncates the activities table by deleting all records from the table.
