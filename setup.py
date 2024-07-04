@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='pickforme',
-    version='0.1.0',
-    author='Your Name',
-    author_email='your.email@example.com',
+    version='0.1.1',
+    author='phileinsophos',
+    author_email='oapatil24@gmail.com',
     description='A tool to manage and pick activities',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
