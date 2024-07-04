@@ -1,10 +1,10 @@
 from colorama import Fore, Style
-from common.utils import UtilityFunctions
-from common import constants
-from business_logic.category import CategoryManager
-from business_logic.activity import ActivityManager
 
-from common.logger import logger
+from pickforme.common.utils import UtilityFunctions
+from pickforme.common import constants
+from pickforme.business_logic.category import CategoryManager
+from pickforme.business_logic.activity import ActivityManager
+from pickforme.common.logger import logger
 
 class PresentCategory(UtilityFunctions, CategoryManager):
     def __init__(self):

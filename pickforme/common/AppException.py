@@ -1,7 +1,7 @@
 import sys
 from colorama import Fore, Style
 
-from common.logger import logger
+from pickforme.common.logger import logger
 
 class PickForMeException(Exception):
     def __init__(self, *args: object) -> None:

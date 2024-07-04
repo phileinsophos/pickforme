@@ -49,7 +49,7 @@ HELP_STRING_TOOL_INIT = """
                 """
                 
 DATABASE_NAME = 'pickforme.db'
-DATABASE_LOCATION = 'app_database/'
+DATABASE_LOCATION = 'app_database'
 
 DATABASE_TABLES = [
     'activities',

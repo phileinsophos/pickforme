@@ -1,6 +1,7 @@
+import os
 import pathlib
-from presentation.cli import PickForMeCmd
-from common.logger import logger
+from pickforme.presentation.cli import PickForMeCmd
+from pickforme.common.logger import logger
 
 def main():
     """
@@ -14,7 +15,9 @@ def main():
     """
     logger.info('Starting PickForMe Tool')
     try:
-        pathlib.Path('app_database').mkdir(parents=True, exist_ok=True)
+        project_install_path = os.path.dirname(os.path.abspath(__file__))
+        app_db_dir = os.path.join(project_install_path, 'app_database')
+        pathlib.Path(app_db_dir).mkdir(parents=True, exist_ok=True)
         cli = PickForMeCmd()
         logger.info('starting CLI loop')
         cli.is_database_initialized = cli.utility_functions.chk_mstr_passwd_cfgrd()

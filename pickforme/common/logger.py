@@ -1,3 +1,4 @@
+import os
 import pathlib
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -11,12 +12,16 @@ def setup_logger():
     Returns:
         log_config (logging.Logger): The logger for the 'pickforme' module
     """
-    pathlib.Path('logs').mkdir(parents=True, exist_ok=True)
     log_config = logging.getLogger('pickforme')
     log_config.setLevel(logging.DEBUG)
 
     # Create handlers
-    file_handler = TimedRotatingFileHandler('logs/pickforme.log', when='midnight', interval=1, backupCount=25)
+    project_install_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(project_install_path, 'logs')
+    print('logs idr = ', logs_dir)
+    pathlib.Path(logs_dir).mkdir(parents=True, exist_ok=True)
+    log_file_path = os.path.join(logs_dir, 'pickforme.log')
+    file_handler = TimedRotatingFileHandler(log_file_path, when='midnight', interval=1, backupCount=25)
 
     # Set logging levels
     file_handler.setLevel(logging.DEBUG)

@@ -4,11 +4,14 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship, scoped_session
 
-from common.AppException import PickForMeException
-from common import constants
-from common.logger import logger
+from pickforme.common.AppException import PickForMeException
+from pickforme.common import constants
+from pickforme.common.logger import logger
 
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///'+constants.DATABASE_LOCATION+constants.DATABASE_NAME)
+project_install_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+project_db_dir = os.path.join(project_install_path, constants.DATABASE_LOCATION)
+app_db_path = os.path.join(project_db_dir, constants.DATABASE_NAME)
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///'+app_db_path)
 
 Base = declarative_base()
 

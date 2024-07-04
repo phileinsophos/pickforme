@@ -1,3 +1,4 @@
+import os
 import pathlib
 import hashlib
 import sqlite3
@@ -5,9 +6,10 @@ import csv
 from prettytable import PrettyTable
 from getpass import getpass
 from colorama import Fore, Style
-from common.AppException import PickForMeException
-from common import constants
-from common.logger import logger
+
+from pickforme.common.AppException import PickForMeException
+from pickforme.common import constants
+from pickforme.common.logger import logger
         
 class UtilityFunctions():
     """
@@ -23,7 +25,10 @@ class UtilityFunctions():
     def get_db_conn_and_cursor(self):
         if self.cursor == None and self.connection == None: 
             logger.info('creating database connection, and returning connection and cursor')
-            self.connection = sqlite3.connect(constants.DATABASE_LOCATION + constants.DATABASE_NAME)
+            project_install_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            project_db_dir = os.path.join(project_install_path, constants.DATABASE_LOCATION)
+            app_db_path = os.path.join(project_db_dir, constants.DATABASE_NAME)
+            self.connection = sqlite3.connect(app_db_path)
             self.cursor = self.connection.cursor()
             logger.info('connection with database established, returning connection and cursor')
             return self.connection, self.cursor
@@ -122,7 +127,9 @@ class UtilityFunctions():
         """
         logger.info('exporting data to csv')
         try:
-            pathlib.Path('pickforme_dbdump').mkdir(parents=True, exist_ok=True)
+            cwd = os.getcwd()
+            print(cwd)
+            pathlib.Path(cwd+'/pickforme_dbdump').mkdir(parents=True, exist_ok=True)
             logger.info('created directory if not exists')
             conn, cursor = self.get_db_conn_and_cursor()
             logger.info('connected to the database')

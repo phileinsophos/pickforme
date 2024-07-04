@@ -1,10 +1,9 @@
 from datetime import datetime, timezone
-from data_access.database import Group, DatabaseConnections
-
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import StatementError
 
-from common.logger import logger
+from pickforme.data_access.database import Group, DatabaseConnections
+from pickforme.common.logger import logger
 
 class GroupManager(DatabaseConnections):
     """Class to manage groups."""

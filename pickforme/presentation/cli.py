@@ -1,16 +1,17 @@
+import os
 from cmd import Cmd
 import sys
 import re
 from getpass import getpass
 from colorama import Fore, Style
-from common.banner import display_banner
-from common import constants
-from data_access.database import DatabaseConnections
-from common.logger import logger
-from presentation.present_group import PresentGroup
-from presentation.present_category import PresentCategory
-from presentation.present_activity import PresentActivity
-from common.utils import UtilityFunctions
+from pickforme.common.banner import display_banner
+from pickforme.common import constants
+from pickforme.data_access.database import DatabaseConnections
+from pickforme.common.logger import logger
+from pickforme.presentation.present_group import PresentGroup
+from pickforme.presentation.present_category import PresentCategory
+from pickforme.presentation.present_activity import PresentActivity
+from pickforme.common.utils import UtilityFunctions
 
 class PickForMeCmd(Cmd):
     """
@@ -327,6 +328,11 @@ class PickForMeCmd(Cmd):
         logger.info('dumping all the records to files')
         self.utility_functions.export_to_csv()
         logger.info('dumped all the records to files')
+    
+    def do_path(self, arg):
+        print('\n')
+        print(Fore.LIGHTYELLOW_EX + os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + Style.RESET_ALL)
+        print('\n')
         
     def default(self, line):
         """
