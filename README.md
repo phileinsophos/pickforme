@@ -4,8 +4,9 @@
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Installation](#installation)
-4. [Contributing](#contributing)
-5. [License](#license)
+4. [Usage](#Usage)
+5. [Contributing](#contributing)
+6. [License](#license)
 
 ## Introduction
 
@@ -35,20 +36,16 @@ The tool organizes options into a three-layer hierarchy:
 
 ### Steps
 
-1. Clone the repository:
+1. Install PickForMe from PyPI:
     ```bash
-    git clone https://github.com/yourusername/pickforme.git
-    cd pickforme
+    pip install pickforme
     ```
 
-2. Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## Usage
 
-3. Initialize the database:
+1. Run the application:
     ```bash
-    python -m pickforme.main
+    pickforme
     ```
 
 ## Contributing
